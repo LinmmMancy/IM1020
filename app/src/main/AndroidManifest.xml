@@ -64,7 +64,8 @@
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.InviteMessageActivity" />
         <activity android:name=".activity.InviteActvity" />
-        <activity android:name=".activity.ChatAcativity"></activity>
+        <activity android:name=".activity.ChatAcativity" />
+        <activity android:name=".activity.GroupListActivity"></activity>
     </application>
 
 </manifest>

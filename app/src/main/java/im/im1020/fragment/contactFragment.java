@@ -25,12 +25,12 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import im.im1020.R;
 import im.im1020.activity.ChatAcativity;
+import im.im1020.activity.GroupListActivity;
 import im.im1020.activity.InviteActvity;
 import im.im1020.activity.InviteMessageActivity;
 import im.im1020.model.Model;
 import im.im1020.model.bean.UserInfo;
 import im.im1020.utils.Constant;
-import im.im1020.utils.ShowToast;
 import im.im1020.utils.SpUtils;
 
 /**
@@ -221,7 +221,14 @@ public class contactFragment extends EaseContactListFragment {
 
                 break;
             case R.id.ll_groups:
-                ShowToast.show(getActivity(), "bbb");
+
+
+                // 群列  展示
+
+                Intent groupintent = new Intent(getActivity(), GroupListActivity.class);
+
+                startActivity(groupintent);
+
                 break;
         }
     }
