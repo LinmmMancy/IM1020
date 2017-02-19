@@ -2,10 +2,14 @@ package im.im1020.fragment;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -31,6 +35,7 @@ import im.im1020.activity.InviteMessageActivity;
 import im.im1020.model.Model;
 import im.im1020.model.bean.UserInfo;
 import im.im1020.utils.Constant;
+import im.im1020.utils.ShowToast;
 import im.im1020.utils.SpUtils;
 
 /**
@@ -53,6 +58,16 @@ public class contactFragment extends EaseContactListFragment {
         }
     };
     private LocalBroadcastManager manager;
+
+    private List<UserInfo> contacts;
+
+    private BroadcastReceiver contactRecevier = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            refreshContact();
+        }
+    };
+    private List<UserInfo> contancts;
 
     @Override
     protected void initView() {
@@ -90,6 +105,8 @@ public class contactFragment extends EaseContactListFragment {
 
         manager.registerReceiver(receiver, new IntentFilter(Constant.NEW_INVITE_CHANGE));
 
+        manager.registerReceiver(contactRecevier, new IntentFilter(Constant.CONTACT_CHANGE));
+
         initData();
 
         //监听事件
@@ -119,6 +136,90 @@ public class contactFragment extends EaseContactListFragment {
                 startActivity(intent);
             }
         });
+
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    return false;
+
+                }
+                showDiglog(position);
+
+                return true;
+            }
+
+
+        });
+    }
+
+    private void showDiglog(final int position) {
+        new AlertDialog.Builder(getActivity())
+                .setMessage("确定要删除吗?")
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deletecontact(position);
+
+                    }
+                })
+                .create()
+                .show();
+
+
+    }
+
+    private void deletecontact(final int position) {
+
+        Model.getInstance().getGlobalThread().execute(new Runnable() {
+            @Override
+            public void run() {
+
+
+                try {
+                    //获取到这个用户的环信id
+
+
+                    final UserInfo userInfo = contacts.get(position - 1);
+
+                    //网络删除
+
+                    EMClient.getInstance().contactManager().deleteContact(userInfo.getHxid());
+
+                    // 本地删除  删除联系人
+
+                    Model.getInstance().getDbManager().getContactDao()
+                            .deleteContactByHxId(userInfo.getHxid());
+
+                    //  根据环信id 删除邀请信息
+
+                    Model.getInstance().getDbManager().getInvitationDao()
+                            .removeInvitation(userInfo.getHxid());
+
+                    //刷新
+
+                    refreshContact();
+
+                    ShowToast.showUI(getActivity(), "删除成功");
+
+
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+
+                    ShowToast.showUI(getActivity(), "删除失败");
+
+                }
+
+            }
+        });
+
     }
 
 
@@ -178,7 +279,7 @@ public class contactFragment extends EaseContactListFragment {
 
         //从本地取数据
 
-        List<UserInfo> contancts = Model.getInstance().getDbManager().getContactDao()
+        contancts = Model.getInstance().getDbManager().getContactDao()
                 .getContacts();
 
         //校验
@@ -204,6 +305,11 @@ public class contactFragment extends EaseContactListFragment {
         refresh();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshContact();
+    }
 
     @OnClick({R.id.ll_new_friends, R.id.ll_groups})
     public void onClick(View view) {
@@ -224,10 +330,11 @@ public class contactFragment extends EaseContactListFragment {
 
 
                 // 群列  展示
-
+                Log.e("TAG", "1111111111");
                 Intent groupintent = new Intent(getActivity(), GroupListActivity.class);
-
+                Log.e("TAG", "22222222222");
                 startActivity(groupintent);
+                Log.e("TAG", "3333333333");
 
                 break;
         }

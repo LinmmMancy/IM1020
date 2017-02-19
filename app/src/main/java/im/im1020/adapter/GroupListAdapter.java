@@ -16,35 +16,30 @@ import butterknife.InjectView;
 import im.im1020.R;
 
 /**
- * Created by Mancy on 2017/2/19.
+ * Created by Administrator on 2017/2/18.
  */
 
 public class GroupListAdapter extends BaseAdapter {
 
     private Context context;
-
     private List<EMGroup> groups;
 
-
     public GroupListAdapter(Context context) {
-
         this.context = context;
         groups = new ArrayList<>();
-
     }
-
 
     public void refresh(List<EMGroup> groups) {
 
         if (groups == null) {
-
             return;
         }
-        this.groups.clear();
 
+        this.groups.clear();
         this.groups.addAll(groups);
 
-        notifyDataSetChanged();
+        // notifyDataSetChanged();
+
     }
 
 
@@ -66,23 +61,22 @@ public class GroupListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-
         ViewHolder viewHolder = null;
 
         if (convertView == null) {
-
             convertView = View.inflate(context, R.layout.adapter_group_list, null);
 
             viewHolder = new ViewHolder(convertView);
+
             convertView.setTag(viewHolder);
-
         } else {
-
             viewHolder = (ViewHolder) convertView.getTag();
         }
+
         EMGroup emGroup = groups.get(position);
 
         viewHolder.groupTvGroupname.setText(emGroup.getGroupName());
+
         return convertView;
     }
 
