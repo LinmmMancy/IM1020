@@ -13,7 +13,12 @@ public class Constant {
     // 联系人 状态
 
 
+
+
+
     public static final String CONTACT_CHANGE = "contact_change";
 
+        //群邀请显示
 
+    public static final String GROUP_INVITE_CHAGE = "group_invite_chage";
 }
