@@ -107,7 +107,7 @@ public class InviteMessageAdapter extends BaseAdapter {
 
             //群邀请
 
-            viewholder.tvInviteName.setText(groupInfo.getGroupName());
+            viewholder.tvInviteName.setText(groupInfo.getInviteperson());
 
 
             //隐藏按钮
