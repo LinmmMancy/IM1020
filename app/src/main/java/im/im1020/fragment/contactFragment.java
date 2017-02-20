@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -330,11 +329,8 @@ public class contactFragment extends EaseContactListFragment {
 
 
                 // 群列  展示
-                Log.e("TAG", "1111111111");
                 Intent groupintent = new Intent(getActivity(), GroupListActivity.class);
-                Log.e("TAG", "22222222222");
                 startActivity(groupintent);
-                Log.e("TAG", "3333333333");
 
                 break;
         }

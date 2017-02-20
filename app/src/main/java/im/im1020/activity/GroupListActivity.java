@@ -54,7 +54,14 @@ public class GroupListActivity extends AppCompatActivity {
                             .getJoinedGroupsFromServer();
 
                     //内存和页面
-                    refresh();
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            refresh();
+                        }
+                    });
+
                 } catch (HyphenateException e) {
                     e.printStackTrace();
                 }
@@ -112,11 +119,10 @@ public class GroupListActivity extends AppCompatActivity {
         lvGrouplist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 
-
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                ShowToast.show(GroupListActivity.this,"111111");
+                ShowToast.show(GroupListActivity.this, "111111");
 
                 if (position == 0) {
                     return;

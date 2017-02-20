@@ -31,7 +31,6 @@ public class InviteMessageActivity extends AppCompatActivity {
 
     private BroadcastReceiver receiver = new BroadcastReceiver() {
 
-        private LocalBroadcastManager manager;
 
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -91,11 +90,11 @@ public class InviteMessageActivity extends AppCompatActivity {
 
                             //内存和网页
                             runOnUiThread(new Runnable() {
+
                                 @Override
                                 public void run() {
-
-
                                     refresh();
+
 
                                     ShowToast.show(InviteMessageActivity.this, "成功");
 
@@ -120,6 +119,8 @@ public class InviteMessageActivity extends AppCompatActivity {
                 Model.getInstance().getGlobalThread().execute(new Runnable() {
                     @Override
                     public void run() {
+
+                        refresh();
 
 
                         try {
@@ -170,8 +171,6 @@ public class InviteMessageActivity extends AppCompatActivity {
         inviteMsgLv.setAdapter(adapter);
 
         refresh();
-
-
     }
 
     private void refresh() {

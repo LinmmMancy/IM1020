@@ -29,6 +29,7 @@ public class GroupListAdapter extends BaseAdapter {
         groups = new ArrayList<>();
     }
 
+
     public void refresh(List<EMGroup> groups) {
 
         if (groups == null) {
@@ -37,8 +38,7 @@ public class GroupListAdapter extends BaseAdapter {
 
         this.groups.clear();
         this.groups.addAll(groups);
-
-        // notifyDataSetChanged();
+        notifyDataSetChanged();
 
     }
 
