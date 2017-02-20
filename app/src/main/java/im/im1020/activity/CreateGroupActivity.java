@@ -77,7 +77,20 @@ public class CreateGroupActivity extends AppCompatActivity {
 
                 try {
 
-                    String[] memberses = data.getStringArrayExtra("memberses");
+                    String[] memberses = data.getStringArrayExtra("members");
+
+                    if (memberses == null) {
+
+                        return;
+                    }
+
+                    if (memberses.length == 0) {
+                        ShowToast.showUI(CreateGroupActivity.this, "没人还加啥");
+
+                        return;
+
+
+                    }
 
                     EMGroupManager.EMGroupOptions options = new EMGroupManager.EMGroupOptions();
 
