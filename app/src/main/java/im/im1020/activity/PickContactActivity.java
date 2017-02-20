@@ -31,10 +31,8 @@ public class PickContactActivity extends AppCompatActivity {
     ListView lvPick;
 
 
-    private PickAdapter adapter;
-
     private List<PickInfo> pickInfos;
-    private PickAdapter adapter1;
+    private PickAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +119,7 @@ public class PickContactActivity extends AppCompatActivity {
 
         adapter = new PickAdapter(this);
 
-        lvPick.setAdapter(adapter1);
+        lvPick.setAdapter(adapter);
 
 
     }
