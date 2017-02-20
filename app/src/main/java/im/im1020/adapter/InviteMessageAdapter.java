@@ -107,6 +107,86 @@ public class InviteMessageAdapter extends BaseAdapter {
 
             //群邀请
 
+            viewholder.tvInviteName.setText(groupInfo.getGroupName());
+
+
+            //隐藏按钮
+
+            viewholder.btInviteReject.setVisibility(View.GONE);
+            viewholder.btInviteAccept.setVisibility(View.GONE);
+
+            switch (invitationInfo.getStatus()) {
+                // 您的群申请请已经被接受
+                case GROUP_APPLICATION_ACCEPTED:
+
+                    viewholder.tvInviteReason.setText("您的群申请请已经被接受");
+                    break;
+                //  您的群邀请已经被接收
+                case GROUP_INVITE_ACCEPTED:
+                    viewholder.tvInviteReason.setText("您的群邀请已经被接收");
+                    break;
+
+                // 你的群申请已经被拒绝
+                case GROUP_APPLICATION_DECLINED:
+                    viewholder.tvInviteReason.setText("你的群申请已经被拒绝");
+                    break;
+
+                // 您的群邀请已经被拒绝
+                case GROUP_INVITE_DECLINED:
+                    viewholder.tvInviteReason.setText("您的群邀请已经被拒绝");
+                    break;
+
+                //您收到了群邀请
+
+                // 您收到了群邀请
+                case NEW_GROUP_INVITE:
+                    viewholder.tvInviteReason.setText("您收到了群邀请");
+
+                    viewholder.btInviteReject.setVisibility(View.VISIBLE);
+                    viewholder.btInviteAccept.setVisibility(View.VISIBLE);
+                    viewholder.btInviteAccept.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (onInviteChangeListener != null) {
+
+                                onInviteChangeListener.onApplicationAccept(invitationInfo);
+                            }
+                        }
+                    });
+
+                    viewholder.btInviteReject.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (onInviteChangeListener != null) {
+                                onInviteChangeListener.onApplicationReject(invitationInfo);
+
+                            }
+                        }
+                    });
+                    break;
+                // 你接受了群邀请
+                case GROUP_ACCEPT_INVITE:
+                    viewholder.tvInviteReason.setText("你接受了群邀请");
+                    break;
+
+                // 您批准了群申请
+                case GROUP_ACCEPT_APPLICATION:
+                    viewholder.tvInviteReason.setText("您批准了群申请");
+                    break;
+
+                // 你拒绝了群邀请
+                case GROUP_REJECT_INVITE:
+                    viewholder.tvInviteReason.setText("你拒绝了群邀请");
+                    break;
+
+                // 您拒绝了群申请
+                case GROUP_REJECT_APPLICATION:
+                    viewholder.tvInviteReason.setText("您拒绝了群申请");
+                    break;
+
+
+            }
+
 
         } else {
             //联系人邀请
@@ -248,6 +328,16 @@ public class InviteMessageAdapter extends BaseAdapter {
         void onAccept(InvitationInfo info); //接受
 
         void onReject(InvitationInfo info);  //拒绝
+
+
+        void onInvireAccept(InvitationInfo info);
+
+        void onInvireReject(InvitationInfo info);
+
+
+        void onApplicationAccept(InvitationInfo info);
+
+        void onApplicationReject(InvitationInfo info);
 
     }
 

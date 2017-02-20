@@ -56,6 +56,13 @@ public class contactFragment extends EaseContactListFragment {
             isShow();
         }
     };
+
+    private BroadcastReceiver groupRecevier = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            isShow();
+        }
+    };
     private LocalBroadcastManager manager;
 
     private List<UserInfo> contacts;
@@ -105,6 +112,8 @@ public class contactFragment extends EaseContactListFragment {
         manager.registerReceiver(receiver, new IntentFilter(Constant.NEW_INVITE_CHANGE));
 
         manager.registerReceiver(contactRecevier, new IntentFilter(Constant.CONTACT_CHANGE));
+
+        manager.registerReceiver(groupRecevier, new IntentFilter(Constant.GROUP_INVITE_CHAGE));
 
         initData();
 
@@ -343,6 +352,10 @@ public class contactFragment extends EaseContactListFragment {
         ButterKnife.reset(this);
 
         manager.unregisterReceiver(receiver);
+
+        manager.unregisterReceiver(contactRecevier);
+
+        manager.unregisterReceiver(groupRecevier);
     }
 
     public void isShow() {

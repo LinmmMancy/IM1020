@@ -166,6 +166,57 @@ public class InviteMessageActivity extends AppCompatActivity {
                 });
 
             }
+
+            @Override
+            public void onInvireAccept(final InvitationInfo info) {
+                Model.getInstance().getGlobalThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        try {
+                            //网络
+                            EMClient.getInstance().groupManager()
+                                    .acceptInvitation(info.getGroupInfo().getGroupName(),
+                                            info.getGroupInfo().getInviteperson());
+                            //本地
+                            Model.getInstance().getDbManager()
+                                    .getInvitationDao()
+                                    .updateInvitationStatus(
+                                            InvitationInfo.InvitationStatus.GROUP_ACCEPT_INVITE,
+                                            info.getUserInfo().getHxid()
+                                    );
+                            //内存和网页
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    refresh();
+                                    ShowToast.show(InviteMessageActivity.this, "接受成功");
+                                }
+                            });
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                            ShowToast.showUI(InviteMessageActivity.this, "接受失败" + e.getMessage());
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onInvireReject(InvitationInfo info) {
+
+            }
+
+            @Override
+            public void onApplicationAccept(InvitationInfo info) {
+
+            }
+
+            @Override
+            public void onApplicationReject(InvitationInfo info) {
+
+            }
+
+
         });
 
         inviteMsgLv.setAdapter(adapter);

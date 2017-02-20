@@ -20,7 +20,6 @@ import butterknife.InjectView;
 import im.im1020.R;
 import im.im1020.adapter.GroupListAdapter;
 import im.im1020.model.Model;
-import im.im1020.utils.ShowToast;
 
 public class GroupListActivity extends AppCompatActivity {
 
@@ -122,7 +121,6 @@ public class GroupListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                ShowToast.show(GroupListActivity.this, "111111");
 
                 if (position == 0) {
                     return;
