@@ -215,21 +215,22 @@ public class GroupDetailAdapter extends BaseAdapter {
 
                     }
                 });
+            } else {
+
+                //群成员
+
+                viewHolder.ivMemberDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (onMembersChangListener != null) {
+
+
+                            onMembersChangListener.onRemoveGroupMember(userInfos.get(position));
+                        }
+                    }
+                });
             }
         } else {
-
-            //群成员
-
-            viewHolder.ivMemberDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onMembersChangListener != null) {
-
-
-                        onMembersChangListener.onRemoveGroupMember(userInfos.get(position));
-                    }
-                }
-            });
 
             if (position == userInfos.size() - 1) {
 

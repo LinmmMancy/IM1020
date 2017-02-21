@@ -273,8 +273,32 @@ public class ChatDetailsActivity extends AppCompatActivity {
                 .getCurrentUser().equals(owner) || group.isPublic();
         adapter = new GroupDetailAdapter(this, isModify, new GroupDetailAdapter.OnMembersChangListener() {
             @Override
-            public void onRemoveGroupMember(UserInfo userInfo) {
-                ShowToast.show(ChatDetailsActivity.this, "删除成功");
+            public void onRemoveGroupMember(final UserInfo userInfo) {
+                //  ShowToast.show(ChatDetailsActivity.this, "删除成功");
+
+                Model.getInstance().getGlobalThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+
+                            //网络删除群成员
+                            EMClient.getInstance().groupManager()
+                                    .removeUserFromGroup(group.getGroupId(), userInfo.getHxid());
+
+                            //网络获取群成员
+                            getGroipMembers();
+
+                            ShowToast.showUI(ChatDetailsActivity.this, "删除成功");
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+
+                            ShowToast.showUI(ChatDetailsActivity.this, "删除失败" + e.getMessage());
+
+                        }
+
+
+                    }
+                });
             }
 
             @Override
