@@ -149,7 +149,7 @@ public class InviteMessageAdapter extends BaseAdapter {
                         public void onClick(View v) {
                             if (onInviteChangeListener != null) {
 
-                                onInviteChangeListener.onApplicationAccept(invitationInfo);
+                                onInviteChangeListener.onInvireAccept(invitationInfo);
                             }
                         }
                     });
@@ -158,13 +158,46 @@ public class InviteMessageAdapter extends BaseAdapter {
                         @Override
                         public void onClick(View v) {
                             if (onInviteChangeListener != null) {
-                                onInviteChangeListener.onApplicationReject(invitationInfo);
+                                onInviteChangeListener.onInvireReject(invitationInfo);
 
                             }
                         }
                     });
                     break;
-                // 你接受了群邀请
+
+
+                // 您收到了申请
+
+                case NEW_GROUP_APPLICATION:
+
+                    viewholder.tvInviteReason.setText("您收到了申请");
+
+                    viewholder.btInviteReject.setVisibility(View.VISIBLE);
+
+                    viewholder.btInviteAccept.setVisibility(View.VISIBLE);
+
+                    viewholder.btInviteAccept.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (onInviteChangeListener != null) {
+
+                                onInviteChangeListener.onApplicationAccept(invitationInfo);
+
+                            }
+                        }
+                    });
+
+
+                    viewholder.btInviteReject.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (onInviteChangeListener != null) {
+
+                                onInviteChangeListener.onApplicationReject(invitationInfo);
+                            }
+                        }
+                    });
+                    // 你接受了群邀请
                 case GROUP_ACCEPT_INVITE:
                     viewholder.tvInviteReason.setText("你接受了群邀请");
                     break;

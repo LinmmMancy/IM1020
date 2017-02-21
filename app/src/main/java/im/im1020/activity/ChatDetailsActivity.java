@@ -108,39 +108,44 @@ public class ChatDetailsActivity extends AppCompatActivity {
 
             btGroupDetail.setText("退群");
 
-            Model.getInstance().getGlobalThread().execute(new Runnable() {
+            btGroupDetail.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void run() {
+                public void onClick(View v) {
+                    Model.getInstance().getGlobalThread().execute(new Runnable() {
+                        @Override
+                        public void run() {
 
-                    try {
-                        EMClient.getInstance().groupManager()
-                                .leaveGroup(groupid);
-
-
-                        exitGroup();
-
-                        //结束当前页面
+                            try {
+                                EMClient.getInstance().groupManager()
+                                        .leaveGroup(groupid);
 
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                finish();
+                                exitGroup();
 
-                                ShowToast.show(ChatDetailsActivity.this, "退群成功");
+                                //结束当前页面
+
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        finish();
+
+                                        ShowToast.show(ChatDetailsActivity.this, "退群成功");
+                                    }
+                                });
+
+
+                            } catch (HyphenateException e) {
+                                e.printStackTrace();
+
+                                ShowToast.showUI(ChatDetailsActivity.this, "退群失败" + e.getMessage());
                             }
-                        });
+                        }
+                    });
 
 
-                    } catch (HyphenateException e) {
-                        e.printStackTrace();
-
-                        ShowToast.showUI(ChatDetailsActivity.this, "退群失败" + e.getMessage());
-                    }
                 }
             });
-
-
         }
     }
 
