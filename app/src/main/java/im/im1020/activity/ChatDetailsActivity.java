@@ -13,11 +13,16 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.exceptions.HyphenateException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import im.im1020.R;
+import im.im1020.adapter.GroupDetailAdapter;
 import im.im1020.imApplication;
 import im.im1020.model.Model;
+import im.im1020.model.bean.UserInfo;
 import im.im1020.utils.Constant;
 import im.im1020.utils.ShowToast;
 
@@ -29,6 +34,11 @@ public class ChatDetailsActivity extends AppCompatActivity {
     Button btGroupDetail;
     private String groupid;
 
+
+    private GroupDetailAdapter adapter;
+    private EMGroup group;
+    private String owner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +46,76 @@ public class ChatDetailsActivity extends AppCompatActivity {
         ButterKnife.inject(this);
 
         initData();
+
+        initView();
+
+        getGroupData();
+
+        //获取群成员
+        getGroipMembers();
+    }
+
+    private void getGroipMembers() {
+
+
+        Model.getInstance().getGlobalThread().execute(new Runnable() {
+            @Override
+            public void run() {
+                //获取群组
+
+
+                try {
+                    EMGroup emgroup = EMClient.getInstance().groupManager()
+                            .getGroupFromServer(groupid);
+
+                    //获取群成员
+
+                    List<String> members = emgroup.getMembers();
+
+                    // 转内型
+
+
+                    final List<UserInfo> userInfos = new ArrayList<UserInfo>();
+
+
+                    for (String hxid : members) {
+
+                        userInfos.add(new UserInfo(hxid));
+
+                    }
+
+                    // 内存 和网页
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            // 刷新
+                            adapter.refresh(userInfos);
+
+                        }
+                    });
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+
+                }
+
+            }
+        });
+
+
+    }
+
+    private void getGroupData() {
+
+
+    }
+
+    private void initView() {
+
+        //  GroupListAdapter adapter = new GroupListAdapter();
+        // gvGroupDetail.setAdapter();
+
     }
 
     private void initData() {
@@ -51,11 +131,11 @@ public class ChatDetailsActivity extends AppCompatActivity {
 
         //获取当前的群组
 
-        EMGroup group = EMClient.getInstance().groupManager().getGroup(groupid);
+        group = EMClient.getInstance().groupManager().getGroup(groupid);
 
         //获取群主
 
-        String owner = group.getOwner();
+        owner = group.getOwner();
 
         if (EMClient.getInstance().getCurrentUser().equals(owner)) {
 
@@ -147,7 +227,29 @@ public class ChatDetailsActivity extends AppCompatActivity {
                 }
             });
         }
+
+
+        // 判断是否有邀请的权限
+
+        boolean isModify = EMClient.getInstance()
+                .getCurrentUser().equals(owner) || group.isPublic();
+        adapter= new GroupDetailAdapter(this, isModify, new GroupDetailAdapter.OnMembersChangListener() {
+            @Override
+            public void onRemoveGroupMember(UserInfo userInfo) {
+                ShowToast.show(ChatDetailsActivity.this,"删除成功");
+            }
+
+            @Override
+            public void onAddGroupMember(UserInfo userInfo) {
+
+                 ShowToast.show(ChatDetailsActivity.this,"添加成功");
+
+            }
+        });
+
+        gvGroupDetail.setAdapter(adapter);
     }
+
 
     private void exitGroup() {
 
