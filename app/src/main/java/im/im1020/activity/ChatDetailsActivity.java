@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
@@ -53,6 +54,43 @@ public class ChatDetailsActivity extends AppCompatActivity {
 
         //获取群成员
         getGroipMembers();
+
+
+        //监听事件
+
+
+        initeListener();
+
+    }
+
+    private void initeListener() {
+
+        gvGroupDetail.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        //获取当前 gridview 适配器  中的deletemodle
+                        boolean deleteModel = adapter.getDeleteModel();
+
+
+                        //只有删除模式下才管用
+                        if (deleteModel) {
+
+                            adapter.setDeleteModel(false);
+                        }
+                        break;
+                }
+
+
+                return false;
+
+            }
+        });
+
+
     }
 
     private void getGroipMembers() {
@@ -233,16 +271,16 @@ public class ChatDetailsActivity extends AppCompatActivity {
 
         boolean isModify = EMClient.getInstance()
                 .getCurrentUser().equals(owner) || group.isPublic();
-        adapter= new GroupDetailAdapter(this, isModify, new GroupDetailAdapter.OnMembersChangListener() {
+        adapter = new GroupDetailAdapter(this, isModify, new GroupDetailAdapter.OnMembersChangListener() {
             @Override
             public void onRemoveGroupMember(UserInfo userInfo) {
-                ShowToast.show(ChatDetailsActivity.this,"删除成功");
+                ShowToast.show(ChatDetailsActivity.this, "删除成功");
             }
 
             @Override
             public void onAddGroupMember(UserInfo userInfo) {
 
-                 ShowToast.show(ChatDetailsActivity.this,"添加成功");
+                ShowToast.show(ChatDetailsActivity.this, "添加成功");
 
             }
         });

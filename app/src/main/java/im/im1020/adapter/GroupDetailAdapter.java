@@ -253,6 +253,17 @@ public class GroupDetailAdapter extends BaseAdapter {
         return convertView;
     }
 
+    public boolean getDeleteModel() {
+        return isDeleteModle;
+    }
+
+    public void setDeleteModel(boolean isDeleteModle) {
+        this.isDeleteModle = isDeleteModle;
+        notifyDataSetChanged();
+
+
+    }
+
     class ViewHolder {
         @InjectView(R.id.iv_member_photo)
         ImageView ivMemberPhoto;
